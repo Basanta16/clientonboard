@@ -1,28 +1,27 @@
 package com.client.autodatabasecreation.databasemanager;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Component
+@RequiredArgsConstructor
 public class DatabaseManager {
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/masterdb";
-    private static final String DB_USER = "postgres";
-    private static final String DB_PASSWORD = "postgres";
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-    }
+    private final DataSource dataSource;
 
-    public static void createDatabaseForClient(String clientName) throws SQLException {
-        try (Connection connection = getConnection()) {
+    public void createDatabaseForClient(String clientName) throws SQLException {
+        try ( Connection connection1 = dataSource.getConnection()) {
             String databaseName = clientName + "_db";
             String sql = "CREATE DATABASE " + databaseName;
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (PreparedStatement statement = connection1.prepareStatement(sql)) {
                 statement.executeUpdate();
             }
         }

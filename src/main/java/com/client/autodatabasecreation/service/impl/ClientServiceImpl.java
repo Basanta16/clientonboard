@@ -15,6 +15,7 @@ import java.sql.SQLException;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientMasterRepo clientMasterRepo;
+    private final DatabaseManager databaseManager;
 
     @Override
     public Integer addClient(ClientRequestPojo clientRequestPojo) {
@@ -24,7 +25,7 @@ public class ClientServiceImpl implements ClientService {
                 .tenantId(clientRequestPojo.getTenantId()).build();
         clientMasterRepo.save(clientMaster);
         try {
-            DatabaseManager.createDatabaseForClient(clientMaster.getClientName());
+            databaseManager.createDatabaseForClient(clientMaster.getClientName());
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
