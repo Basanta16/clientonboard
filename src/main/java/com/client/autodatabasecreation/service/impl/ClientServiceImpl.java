@@ -8,6 +8,7 @@ import com.client.autodatabasecreation.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.SQLException;
 
 @Service
@@ -18,6 +19,7 @@ public class ClientServiceImpl implements ClientService {
     private final DatabaseManager databaseManager;
 
     @Override
+    @Transactional
     public Integer addClient(ClientRequestPojo clientRequestPojo) {
         ClientMaster clientMaster = ClientMaster.builder()
                 .clientAlias(clientRequestPojo.getClientAlias())
